@@ -1,5 +1,5 @@
-import User from '../models/user';
-import APIError from '../helpers/APIError'
+import { User } from '../models/user';
+import APIError from '../helpers/APIError';
 
 export const register = (req, res, next) =>
 	User.create(req.body)
