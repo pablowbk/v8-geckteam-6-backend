@@ -2,8 +2,8 @@ const express = require('express');
 
 const MongoClient = require('mongodb').MongoClient;
 
-const notFoundMiddleware = require('./app/middleware/notFound');
-const errorHandlerMiddleware = require('./app/middleware/errorHandler');
+// const notFoundMiddleware = require('./app/middleware/notFound');
+// const errorHandlerMiddleware = require('./app/middleware/errorHandler');
 
 const bodyParser = require('body-parser');
 

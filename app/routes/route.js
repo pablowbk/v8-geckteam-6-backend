@@ -32,8 +32,8 @@ module.exports = function (app, db) {
 		comercialName: req.body.comercialName,
 		name: req.body.name,
 		dosage: req.body.dosage,
-		Units: req.body.units,
-		Expiration: req.body.expiration,
+		units: req.body.units,
+		expiration: req.body.expiration,
 		image: req.body.image,
 		contact: req.body.contact,
 	};
