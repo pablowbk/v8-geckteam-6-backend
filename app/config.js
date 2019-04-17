@@ -1,15 +1,15 @@
-import 'dotenv/config'
-import convict from 'convict'
+import 'dotenv/config';
+import convict from 'convict';
 
 const config = convict({
 	env: {
-		format: ['production', 'development','test'],
+		format: ['production', 'development', 'test'],
 		default: 'development',
 		env: 'NODE_ENV'
 	},
 	host: {
 		format: 'ipaddress',
-		default: '192.168.0.11',
+		default: '127.0.0.1',
 		env: 'HOST',
 		arg: 'host'
 	},
@@ -55,4 +55,4 @@ const config = convict({
 	}
 });
 
-export default config.get()
+export default config.get();

@@ -6,6 +6,11 @@ export const register = (req, res, next) =>
 					.then(user => res.status(201).send(user))
 					.catch(next);
 
+export const list = (req, res, next) =>
+  User.list()
+    .then(users => res.send(users))
+    .catch(next);
+
 export const load = (req, res, next, id) =>
 	User.get(id)
 					.then(user => {

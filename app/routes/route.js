@@ -7,16 +7,15 @@ module.exports = function (app, db) {
 		name: req.body.name,
 		email: req.body.email,
 		password: req.body.password,
-		tos: req.body.tos,
-		location: req.body.location
+		terms: req.body.terms,
 	};
 		db.collection('Users').insertOne(user, (err, result) => {
-				console.log('Object sent: ', result.ops);
 				if (err) {
 					res.send({ error: 'An error has ocurred' });
 				} else {
-					console.log('Server: POST taken');
-					res.send(result.ops[0]);
+					console.log('Server: POST taken to User: ', user);
+					console.log('result: ', result.ops);
+					res.send(result.ops);
 				}
 		});
 	});

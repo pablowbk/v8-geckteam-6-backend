@@ -24,20 +24,9 @@ const schema = new Schema({
 		type: String,
 		required: true
 	},
-	tos: {
+	Terms: {
 		type: Boolean,
 		required: true
-	},
-	location: {
-		type: String,
-		required: true,
-		match: /^[a-zA-Z0-9]+$/,
-	},
-	createdAt: {
-		type: Date,
-	},
-	updatedAt: {
-		type: Date,
 	},
 }, {
 	toObject: {
@@ -54,9 +43,9 @@ schema.pre('save', (next) => {
 	if (!this.isModified('password')) {
 		return next();
 	}
-	bcrypt.getnSalt(config.saltRounds, (err, salt) => {
+	bcrypt.getSalt(config.saltRounds, (err, salt) => {
 		if (err) return next(err);
-		bcrypt.hash(user.password, salt, function (err, hash) => {
+		bcrypt.hash(user.password, salt, (err, hash) => {
 			if (err) return next(err);
 			user.password = hash;
 			next();
@@ -65,28 +54,28 @@ schema.pre('save', (next) => {
 });
 
 schema.methods = {
-	comparePassword = (candidate) => {
+	comparePassword(candidate) {
 		const user = this;
-		return new Promise((resolve, reject)=> {
-			bcrypt.compare(candidate, user.password, function(err, match) {
-				if (err) return reject(err)
-				resolve(match)
-			})
-		})
+		return new Promise((resolve, reject) => {
+			bcrypt.compare(candidate, user.password, (err, match) => {
+				if (err) return reject(err);
+				resolve(match);
+			});
+		});
 	}
-}
+};
 schema.statics = {
-	get (id) {
-		const $or = [ { name: id}, { email: id }]
+	get(id) {
+		const $or = [{ name: id }, { email: id }];
 		if (Types.ObjectId.isValid(id)) {
-			$or.push({_id: id })
+			$or.push({ _id: id });
 		}
-		return this.findOne({ $or }).exec()
+		return this.findOne({ $or }).exec();
 	},
-	list () {
-		const criteria = {}
-		return this.find(criteria).exec()
+	list() {
+		const criteria = {};
+		return this.find(criteria).exec();
 	}
-}
+};
 
-export default mongoose.model('User', schema)
+export default mongoose.model('User', schema);
