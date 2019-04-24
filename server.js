@@ -18,16 +18,19 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-
+app.use(bodyParser.json());
 //1
-	app.get('/users', cors(), (req, res) => {
-			res.send('Getting hit');
+	app.get('/users', (req, res) => {
+		res.send('Getting hit');
 	});
 //2
-	app.post('/users', cors(), (req, res) => {
-		user.register(req, res);
-		res.send('done');
+	app.post('/users', (req, res) => {
+		console.log('reqServo: ', req.body);
+			user.register(req, res);
 	});
+	app.post('/auth', (req, res) => {
+		res.send('Authorize this, maggot')
+	})
 			// db.collection('Users').insertOne(nuser, (err, result) => {
 			// 		if (err) {
 			// 			res.send({ error: 'There was an error' });

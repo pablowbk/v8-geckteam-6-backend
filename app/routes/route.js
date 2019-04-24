@@ -14,7 +14,7 @@ const cors = require('cors');
 				if (err) {
 					res.send({ error: 'There was an error' });
 				} else {
-					res.send(result.ops[0]);
+					 return res.send(result.ops[0]);
 				}
 			});
 			console.log('db', db);

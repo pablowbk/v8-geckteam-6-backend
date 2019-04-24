@@ -24,23 +24,46 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	},
+	confirmPassword: {
+		type: String,
+		required: true
+	},
 	terms: {
 		type: Boolean,
 		required: true
-	},
+	}
 });
 
 UserSchema.plugin(uniqueValidator);
 
-UserSchema.pre('save', (next) => {
-	bcrypt.getSalt(config.saltRounds, (err, salt) => {
-		if (err) return next(err);
-		bcrypt.hash(this.password, salt, (error, hash) => {
-			if (error) return next(error);
-			this.password = hash;
-			next();
-		});
-	});
+UserSchema.pre('init', function (next) {
+	console.log('Open the gate, im Initializing the DB');
+	return next();
+});
+
+UserSchema.pre('save', function (next) {
+	console.log('Inputing New User');
+	return next();
+})
+
+UserSchema.pre('save', function (next) {
+  const user = this;
+  if (!this.isModified('password')) {
+    return next();
+  }
+  bcrypt.genSalt(config.saltRounds, function (err, salt) {
+    if (err) return next(err);
+    bcrypt.hash(user.password, salt, function (error, hash) {
+      if (error) return next(error);
+      user.password = hash;
+      next();
+    });
+  });
+});
+UserSchema.post('save', function (next) {
+	console.log('User Saved');
+	const user = this;
+	console.log('user:', user.name);
 });
 
 UserSchema.methods = {

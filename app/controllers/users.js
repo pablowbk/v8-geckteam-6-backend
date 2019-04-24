@@ -1,19 +1,39 @@
 import User from '../models/user';
 
-export const register = (req, res, next) =>
-	User.create({
-		name: req.body.name,
-		email: req.body.email,
-		password: req.body.password,
-		terms: req.body.terms
-	}, (err, user) => {
+export const register = function (req, res, next) {
+	const { email, name, password, confirmPassword, terms } = req.body;
+	console.log('req', req.body);
+  if (!name || !email || !password || !confirmPassword || !terms) {
+    return res.status(400).json('invalid data submitted');
+  }
+  User.create({
+				name,
+				email,
+				password,
+				confirmPassword,
+				terms
+			}, (err, user) => {
 		if (err) {
 			console.log('Error creating an User: ', err);
-			res.status(400);
+			res.status(400).send(err);
 		} else {
-			res.status(201).send(user);
+			return res.status(201).send(user);
 		}
 	});
+ };
+	// User.create({
+	// 	name: req.body.name,
+	// 	email: req.body.email,
+	// 	password: req.body.password,
+	// 	terms: req.body.terms
+	// }, (err, user) => {
+	// 	if (err) {
+	// 		console.log('Error creating an User: ', err);
+	// 		res.status(400);
+	// 	} else {
+	// 		res.status(201);
+	// 	}
+	// });
 
 export const list = (req, res, next) =>
   User.list()
