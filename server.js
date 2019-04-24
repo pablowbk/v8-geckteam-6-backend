@@ -1,51 +1,57 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import jwt from 'express-jwt';
-// import { notFound, validationError, errorHandlerMiddleware } from './app/middleware/';
-import routes from './app/routes';
+import db from './app/db/db';
+// import jwt from 'express-jwt';
+// import route from './app/routes';
+
 import config from './app/config';
+
+import * as user from './app/controllers/users.js';
 
 const app = express();
 
-app.use(bodyParser.json());
+
 app.use(cors());
 
-const unprotected = [
-	{ url: '/users', method: 'POST' },
-	{ url: '/meds', method: 'POST' }
-];
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
-app.use(
-	jwt({ secret: config.jwt.secret })
-		.unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
-	);
 
-app.use('/', routes);
-
-// app.use(notFound);
-// app.use(validationError);
-// app.use(errorHandlerMiddleware);
-
-const startServer = () => {
-	console.log('Starting Server up..');
-	const server = app.listen(config.port, config.host, () => {
-			console.log('Server is Up&Running on port %d', server.address().port);
+//1
+	app.get('/users', cors(), (req, res) => {
+			res.send('Getting hit');
 	});
-};
-
-const connectDatabase = () => {
-	console.log('Connecting to Mlab');
-	return mongoose.connect(config.mongodb.uri, { useCreateIndex: true, useNewUrlParser: true })
-	.then(() => {
-		console.log('Connected to %s', mongoose.connections[0].host);
+//2
+	app.post('/users', cors(), (req, res) => {
+		user.register(req, res);
+		res.send('done');
 	});
-};
+			// db.collection('Users').insertOne(nuser, (err, result) => {
+			// 		if (err) {
+			// 			res.send({ error: 'There was an error' });
+			// 		} else {
+			// 			res.send(result.ops[0]);
+			// 		}
+			// 	});
+			// res.send(user);
+		// 	console.log('userUP', nuser);	
+		// });
 
-connectDatabase()
-	.then(startServer)
-	.catch(err => {
-		console.error(err);
-		process.exit(1);
+
+// app.use('/users', cors(), (req, res, next) => {
+// 	console.log('Request Type: ', req.method);
+// 	next();
+// });
+ app.listen(config.port, () => {
+			console.log('Server is Up&Running on port %d', config.port);
 	});
+
+// const connectDatabase = () => {
+// 	console.log('Connecting to Mlab');
+// 	return mongoose.connect(config.mongodb.uri, { useCreateIndex: true, useNewUrlParser: true })
+// 	.then(() => {
+// 		console.log('Connected to %s', mongoose.connections[0].host);
+// 	});
+

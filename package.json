@@ -2,10 +2,10 @@
   "name": "merhubback",
   "version": "1.0.0",
   "description": "The BackEnd",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "test",
-    "dev": "nodemon server.js --watch src --exec babel-node"
+    "dev": "nodemon server.js --watch app --exec babel-node"
   },
   "author": "Frank",
   "license": "ISC",

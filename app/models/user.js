@@ -1,9 +1,9 @@
 import mongoose, { Schema, Types } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import bcrypt from 'bcrypt';
-import config from '../config'
+import config from '../config';
 
-const schema = new Schema({
+const UserSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
@@ -24,36 +24,26 @@ const schema = new Schema({
 		type: String,
 		required: true
 	},
-	Terms: {
+	terms: {
 		type: Boolean,
 		required: true
 	},
-}, {
-	toObject: {
-		transform(doc, ret) {
-			delete ret.password;
-		}
-	}
 });
 
-schema.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator);
 
-schema.pre('save', (next) => {
-	const user = this;
-	if (!this.isModified('password')) {
-		return next();
-	}
+UserSchema.pre('save', (next) => {
 	bcrypt.getSalt(config.saltRounds, (err, salt) => {
 		if (err) return next(err);
-		bcrypt.hash(user.password, salt, (err, hash) => {
-			if (err) return next(err);
-			user.password = hash;
+		bcrypt.hash(this.password, salt, (error, hash) => {
+			if (error) return next(error);
+			this.password = hash;
 			next();
 		});
 	});
 });
 
-schema.methods = {
+UserSchema.methods = {
 	comparePassword(candidate) {
 		const user = this;
 		return new Promise((resolve, reject) => {
@@ -64,9 +54,10 @@ schema.methods = {
 		});
 	}
 };
-schema.statics = {
+UserSchema.statics = {
 	get(id) {
 		const $or = [{ name: id }, { email: id }];
+		console.log('$or', $or);
 		if (Types.ObjectId.isValid(id)) {
 			$or.push({ _id: id });
 		}
@@ -78,4 +69,4 @@ schema.statics = {
 	}
 };
 
-export default mongoose.model('User', schema);
+export default mongoose.model('User', UserSchema);

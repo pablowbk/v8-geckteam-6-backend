@@ -7,12 +7,6 @@ const config = convict({
 		default: 'development',
 		env: 'NODE_ENV'
 	},
-	host: {
-		format: 'ipaddress',
-		default: '127.0.0.1',
-		env: 'HOST',
-		arg: 'host'
-	},
 	port: {
 		format: 'port',
 		default: 7600,
