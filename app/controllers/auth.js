@@ -4,7 +4,7 @@ import { APIError } from '../helpers/APIError';
 import config from '../config';
 
 export const login = (req, res, next) =>
-	User.get(req.body.name)
+	User.get(req.body.email)
 					.then(user => {
 						if (!user) {
 							throw new APIError('Login Failed', 400);
@@ -15,7 +15,7 @@ export const login = (req, res, next) =>
 																			throw new APIError('Login Failed', 400);
 																		}
 																		const token = jwt.sign({
-																			name: user.name
+																			email: user.email
 																		}, config.jwt.secret, {
 																			issuer: config.jwt.issuer,
 																			expiresIn: config.jwt.expiresIn,

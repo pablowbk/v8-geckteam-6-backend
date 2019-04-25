@@ -24,10 +24,6 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	},
-	confirmPassword: {
-		type: String,
-		required: true
-	},
 	terms: {
 		type: Boolean,
 		required: true
@@ -36,17 +32,17 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(uniqueValidator);
 
-UserSchema.pre('init', function (next) {
+UserSchema.pre('init', (next) => {
 	console.log('Open the gate, im Initializing the DB');
 	return next();
 });
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', (next) => {
 	console.log('Inputing New User');
 	return next();
-})
+});
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', (next) => {
   const user = this;
   if (!this.isModified('password')) {
     return next();

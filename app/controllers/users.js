@@ -1,16 +1,16 @@
 import User from '../models/user';
+import APIError from '../helpers/APIError';
 
 export const register = function (req, res, next) {
-	const { email, name, password, confirmPassword, terms } = req.body;
-	console.log('req', req.body);
-  if (!name || !email || !password || !confirmPassword || !terms) {
-    return res.status(400).json('invalid data submitted');
+	const { email, name, password, terms } = req.body;
+	console.log('request from controller: ', req.body);
+  if (!name || !email || !password || !terms) {
+    return res.status(400).json('invalid data submitted');	
   }
   User.create({
 				name,
 				email,
 				password,
-				confirmPassword,
 				terms
 			}, (err, user) => {
 		if (err) {
@@ -40,16 +40,16 @@ export const list = (req, res, next) =>
     .then(users => res.send(users))
     .catch(next);
 
-// export const load = (req, res, next, id) =>
-// 	User.get(id)
-// 					.then(user => {
-// 						if (!user) {
-// 							throw new APIError('User does not exist', 404);
-// 						}
-// 						req.user = user;
-// 						next();
-// 					})
-// 					.catch(next);
+export const load = (req, res, next, id) =>
+	User.get(id)
+					.then(user => {
+						if (!user) {
+							throw new APIError('User does not exist', 404);
+						}
+						req.user = user;
+						next();
+					})
+					.catch(next);
  
 export const exist = (req, res) =>
 	res.sendStatus(req.user ? 200 : 404);

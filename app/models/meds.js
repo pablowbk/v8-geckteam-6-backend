@@ -1,6 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 
-const schema = new Schema({
+
+const MedSchema = new Schema({
 	manufacturer: {
 		type: String,
 		required: true,
@@ -58,8 +60,13 @@ const schema = new Schema({
 	updatedAt: {
 		type: Date,
 		required: true
+	},
+	userId: {
+		type: String
 	}
 	});
 
-export default mongoose.model('Meds', schema);
+MedSchema.plugin(uniqueValidator);
+
+export default mongoose.model('Meds', MedSchema);
 

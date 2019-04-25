@@ -8,6 +8,8 @@ import db from './app/db/db';
 import config from './app/config';
 
 import * as user from './app/controllers/users.js';
+import * as meds from './app/controllers/meds.js';
+import * as auth from './app/controllers/auth.js';
 
 const app = express();
 
@@ -25,28 +27,18 @@ app.use(bodyParser.json());
 	});
 //2
 	app.post('/users', (req, res) => {
-		console.log('reqServo: ', req.body);
+		console.log('request to the server: ', req);
 			user.register(req, res);
 	});
+	app.post('/meds', (req, res) => {
+		console.log('requested input med:', req);
+		meds.addit(req, res);
+	});
 	app.post('/auth', (req, res) => {
-		res.send('Authorize this, maggot')
-	})
-			// db.collection('Users').insertOne(nuser, (err, result) => {
-			// 		if (err) {
-			// 			res.send({ error: 'There was an error' });
-			// 		} else {
-			// 			res.send(result.ops[0]);
-			// 		}
-			// 	});
-			// res.send(user);
-		// 	console.log('userUP', nuser);	
-		// });
+		auth.login(req, res);
+		res.send('Authorize this, maggot');
+	});
 
-
-// app.use('/users', cors(), (req, res, next) => {
-// 	console.log('Request Type: ', req.method);
-// 	next();
-// });
  app.listen(config.port, () => {
 			console.log('Server is Up&Running on port %d', config.port);
 	});
