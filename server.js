@@ -19,16 +19,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
-
-// app.use(bodyParser.json());
-
+app.use(bodyParser.json());
 //1
 	app.get('/users', (req, res) => {
 		res.send('Getting hit');
 	});
 //2
 	app.post('/users', (req, res) => {
-		console.log('request to the server: ', req);
+		console.log('request to the server: ', req.body);
 			user.register(req, res);
 	});
 	app.post('/meds', (req, res) => {

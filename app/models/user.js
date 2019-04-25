@@ -24,6 +24,10 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	},
+	confirmPassword: {
+		type: String,
+		required: true
+	},
 	terms: {
 		type: Boolean,
 		required: true
@@ -42,19 +46,19 @@ UserSchema.pre('save', (next) => {
 	return next();
 });
 
-UserSchema.pre('save', (next) => {
-  const user = this;
-  if (!this.isModified('password')) {
-    return next();
-  }
-  bcrypt.genSalt(config.saltRounds, function (err, salt) {
-    if (err) return next(err);
-    bcrypt.hash(user.password, salt, function (error, hash) {
-      if (error) return next(error);
-      user.password = hash;
-      next();
-    });
+UserSchema.pre('save', function (next) {
+ const user = this;
+	if (!this.isModified('password')) {
+  return next();
+ }
+ bcrypt.genSalt(config.saltRounds, function (err, salt) {
+  if (err) return next(err);
+  bcrypt.hash(user.password, salt, function (error, hash) {
+   if (error) return next(error);
+   user.password = hash;
+   next();
   });
+ });
 });
 UserSchema.post('save', function (next) {
 	console.log('User Saved');

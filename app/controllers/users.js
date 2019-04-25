@@ -2,7 +2,7 @@ import User from '../models/user';
 import APIError from '../helpers/APIError';
 
 export const register = function (req, res, next) {
-	const { email, name, password, terms } = req.body;
+	const { email, name, password, confirmPassword, terms } = req.body;
 	console.log('request from controller: ', req.body);
   if (!name || !email || !password || !terms) {
     return res.status(400).json('invalid data submitted');	
@@ -11,6 +11,7 @@ export const register = function (req, res, next) {
 				name,
 				email,
 				password,
+				confirmPassword,
 				terms
 			}, (err, user) => {
 		if (err) {
@@ -21,20 +22,6 @@ export const register = function (req, res, next) {
 		}
 	});
  };
-	// User.create({
-	// 	name: req.body.name,
-	// 	email: req.body.email,
-	// 	password: req.body.password,
-	// 	terms: req.body.terms
-	// }, (err, user) => {
-	// 	if (err) {
-	// 		console.log('Error creating an User: ', err);
-	// 		res.status(400);
-	// 	} else {
-	// 		res.status(201);
-	// 	}
-	// });
-
 export const list = (req, res, next) =>
   User.list()
     .then(users => res.send(users))
