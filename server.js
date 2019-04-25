@@ -20,7 +20,8 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+
 //1
 	app.get('/users', (req, res) => {
 		res.send('Getting hit');
