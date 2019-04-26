@@ -38,7 +38,6 @@ UserSchema.plugin(uniqueValidator);
 
 UserSchema.pre('init', (next) => {
 	console.log('Open the gate, im Initializing the DB');
-	return next();
 });
 
 UserSchema.pre('save', (next) => {
@@ -56,9 +55,21 @@ UserSchema.pre('save', function (next) {
   bcrypt.hash(user.password, salt, function (error, hash) {
    if (error) return next(error);
    user.password = hash;
-   next();
   });
  });
+
+ // Unica manera de ser confidencial con las PW que inputeamos
+ // esta modalidad no realiza el mismo hash para cada string 
+ // retornando un Hash individual. No se si se pueden comparar.
+ 
+ bcrypt.genSalt(config.saltRounds, function (errw, salt) {
+ 	if (errw) return next(errw);
+  bcrypt.hash(user.confirmPassword, salt, (errors, hashs) => {
+  	if (errors) return next(errors);
+ 		user.confirmPassword = hashs;
+ 		next();
+  });
+	});
 });
 UserSchema.post('save', function (next) {
 	console.log('User Saved');

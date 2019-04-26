@@ -1,12 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import jwt from 'express-jwt';
 import cors from 'cors';
 import db from './app/db/db';
-// import jwt from 'express-jwt';
 // import route from './app/routes';
 
 import config from './app/config';
-
 import * as user from './app/controllers/users.js';
 import * as meds from './app/controllers/meds.js';
 import * as auth from './app/controllers/auth.js';
@@ -15,11 +14,18 @@ const app = express();
 
 
 app.use(cors());
-
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
+const unprotected = [
+  { url: '/auth', method: 'POST' },
+  { url: '/users', method: 'POST' }
+];
+app.use(
+  jwt({ secret: config.jwt.secret })
+    .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
+);
 //1
 	app.get('/users', (req, res) => {
 		res.send('Getting hit');
@@ -34,18 +40,11 @@ app.use(bodyParser.json());
 		meds.addit(req, res);
 	});
 	app.post('/auth', (req, res) => {
+		console.log('Asking for the Authorization: ', req.body);
 		auth.login(req, res);
-		res.send('Authorize this, maggot');
 	});
 
  app.listen(config.port, () => {
 			console.log('Server is Up&Running on port %d', config.port);
 	});
-
-// const connectDatabase = () => {
-// 	console.log('Connecting to Mlab');
-// 	return mongoose.connect(config.mongodb.uri, { useCreateIndex: true, useNewUrlParser: true })
-// 	.then(() => {
-// 		console.log('Connected to %s', mongoose.connections[0].host);
-// 	});
 
