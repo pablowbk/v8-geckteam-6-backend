@@ -27,20 +27,20 @@ app.use(
     .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
 );
 //1
-	app.get('/users', (req, res) => {
-		res.send('Getting hit');
+	app.get('/user:id', (req, res) => {
+		user.load(req.id);
 	});
 //2
 	app.post('/users', (req, res) => {
-		console.log('request to the server: ', req.body);
+		// console.log('request to the server: ', req.body);
 			user.register(req, res);
 	});
 	app.post('/meds', (req, res) => {
-		console.log('requested input med:', req);
+		// console.log('requested input med:', req);
 		meds.addit(req, res);
 	});
 	app.post('/auth', (req, res) => {
-		console.log('Asking for the Authorization: ', req.body);
+		// console.log('Asking for the Authorization: ', req.body);
 		auth.login(req, res);
 	});
 

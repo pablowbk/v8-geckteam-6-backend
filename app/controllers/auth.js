@@ -21,7 +21,11 @@ export const login = (req, res, next) =>
 																			expiresIn: config.jwt.expiresIn,
 																			subject: user.id
 																		});
-																	return	res.status(201).send({ token });
+
+																		const id = user.id;
+																		console.log('user id', id);
+
+																	return	res.status(201).send({ token, id });
 																	});
 					})
 					.catch(next);

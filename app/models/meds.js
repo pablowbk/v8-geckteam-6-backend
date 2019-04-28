@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
 
@@ -67,6 +67,21 @@ const MedSchema = new Schema({
 	});
 
 MedSchema.plugin(uniqueValidator);
+
+MedSchema.statics = {
+	get(id) {
+		const $or = [{ name: id }, { email: id }];
+		console.log('$or', $or);
+		if (Types.ObjectId.isValid(id)) {
+			$or.push({ id });
+		}
+		return this.findOne({ $or }).exec();
+	},
+	list() {
+		const criteria = {};
+		return this.find(criteria).exec();
+	}
+};
 
 export default mongoose.model('Meds', MedSchema);
 

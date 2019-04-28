@@ -61,7 +61,7 @@ UserSchema.pre('save', function (next) {
  // Unica manera de ser confidencial con las PW que inputeamos
  // esta modalidad no realiza el mismo hash para cada string 
  // retornando un Hash individual. No se si se pueden comparar.
- 
+
  bcrypt.genSalt(config.saltRounds, function (errw, salt) {
  	if (errw) return next(errw);
   bcrypt.hash(user.confirmPassword, salt, (errors, hashs) => {
@@ -93,7 +93,7 @@ UserSchema.statics = {
 		const $or = [{ name: id }, { email: id }];
 		console.log('$or', $or);
 		if (Types.ObjectId.isValid(id)) {
-			$or.push({ _id: id });
+			$or.push({ id });
 		}
 		return this.findOne({ $or }).exec();
 	},
