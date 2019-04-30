@@ -21,7 +21,6 @@ export const login = (req, res, next) =>
 																			expiresIn: config.jwt.expiresIn,
 																			subject: user.id
 																		});
-
 																		const id = user.id;
 																		console.log('user id', id);
 

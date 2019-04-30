@@ -28,13 +28,14 @@ app.use(
     .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
 );
 //1
-	app.get('/user:id', (req, res) => {
-		user.load(req.id)
-			.then(() => res.send(user));
-	});
+	// app.get('/user:id', (req, res) => {
+	// 	user.load(req.id)
+	// 		.then(() => res.send(user));
+	// });
 
 	app.get('/meds', (req, res) => {
-		meds.list();
+		meds.list(req, res)
+		.then(response => res.send(response));
 	});
 //2
 	app.post('/users', (req, res) => {
@@ -43,7 +44,7 @@ app.use(
 	});
 	app.post('/meds', (req, res) => {
 		console.log('requested input med:', req.body);
-		meds.addit(req, res);
+		meds.addit(req, res)
 	});
 	app.post('/auth', (req, res) => {
 		// console.log('Asking for the Authorization: ', req.body);

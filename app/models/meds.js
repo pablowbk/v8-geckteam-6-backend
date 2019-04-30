@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
+const ObjectId = Schema.Types.ObjectId;
+
 const MedSchema = new Schema({
 	manufacturer: {
 		type: String,
@@ -47,9 +49,10 @@ const MedSchema = new Schema({
 		required: false,
 	},
 	owner: {
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}
+		type: ObjectId,
+		ref: 'User',
+		required: true,
+	},
 	});
 
 MedSchema.pre('save', (next) => {
@@ -60,6 +63,7 @@ MedSchema.post('save', function (next) {
 	console.log('Med Saved');
 	const med = this;
 	console.log('Med:', med.name);
+	return next;
 });
 
 MedSchema.statics = {
@@ -69,13 +73,8 @@ MedSchema.statics = {
 			.exec();
 	},
 	list() {
-		const pipeline = [{
-			'$project': {
-				'meds': '$meds',
-			}
-		}];
-		return this.aggregate(pipeline)
-			.exec();
+		const criteria = {};
+		return this.find(criteria).exec();
 	}
 };
 

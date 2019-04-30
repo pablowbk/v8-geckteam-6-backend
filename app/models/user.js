@@ -31,7 +31,7 @@ const UserSchema = new Schema({
 	terms: {
 		type: Boolean,
 		required: true
-	}
+	},
 });
 
 UserSchema.plugin(uniqueValidator);
