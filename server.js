@@ -20,7 +20,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 const unprotected = [
   { url: '/auth', method: 'POST' },
-  { url: '/users', method: 'POST' }
+  { url: '/users', method: 'POST' },
+  { url: '/meds', method: 'POST' }
 ];
 app.use(
   jwt({ secret: config.jwt.secret })
@@ -28,7 +29,12 @@ app.use(
 );
 //1
 	app.get('/user:id', (req, res) => {
-		user.load(req.id);
+		user.load(req.id)
+			.then(() => res.send(user));
+	});
+
+	app.get('/meds', (req, res) => {
+		meds.list();
 	});
 //2
 	app.post('/users', (req, res) => {
@@ -36,7 +42,7 @@ app.use(
 			user.register(req, res);
 	});
 	app.post('/meds', (req, res) => {
-		// console.log('requested input med:', req);
+		console.log('requested input med:', req.body);
 		meds.addit(req, res);
 	});
 	app.post('/auth', (req, res) => {

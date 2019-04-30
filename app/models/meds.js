@@ -1,6 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
-
+import mongoose, { Schema } from 'mongoose';
 
 const MedSchema = new Schema({
 	manufacturer: {
@@ -41,45 +39,43 @@ const MedSchema = new Schema({
 	},
 	expiration: {
 		type: Date,
-		required: true,
+		default: Date.now,
 		match: /^[a-zA-Z0-9]+$/,
 	},
 	image: {
 		type: String,
 		required: false,
 	},
-	contact: {
-		type: String,
-		required: true,
-		match: /^[a-zA-Z0-9]+$/,
-	},
-	createdAt: {
-		type: Date,
-		required: true
-	},
-	updatedAt: {
-		type: Date,
-		required: true
-	},
-	userId: {
-		type: String
+	owner: {
+		type: Schema.Types.ObjectId,
+		ref: 'User'
 	}
 	});
 
-MedSchema.plugin(uniqueValidator);
+MedSchema.pre('save', (next) => {
+	console.log('Inputing New Med');
+	return next();
+});
+MedSchema.post('save', function (next) {
+	console.log('Med Saved');
+	const med = this;
+	console.log('Med:', med.name);
+});
 
 MedSchema.statics = {
 	get(id) {
-		const $or = [{ name: id }, { email: id }];
-		console.log('$or', $or);
-		if (Types.ObjectId.isValid(id)) {
-			$or.push({ id });
-		}
-		return this.findOne({ $or }).exec();
+		return this.findById(id)
+			.populate('owner')
+			.exec();
 	},
 	list() {
-		const criteria = {};
-		return this.find(criteria).exec();
+		const pipeline = [{
+			'$project': {
+				'meds': '$meds',
+			}
+		}];
+		return this.aggregate(pipeline)
+			.exec();
 	}
 };
 
