@@ -21,35 +21,23 @@ app.use(bodyParser.json());
 const unprotected = [
   { url: '/auth', method: 'POST' },
   { url: '/users', method: 'POST' },
-  { url: '/meds', method: 'POST' }
+  { url: '/meds', method: 'POST' },
 ];
 app.use(
   jwt({ secret: config.jwt.secret })
     .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
 );
 //1
-	// app.get('/user:id', (req, res) => {
-	// 	user.load(req.id)
-	// 		.then(() => res.send(user));
-	// });
-
-const test = function (req, res, next) {
-//user exist?
-	user.exist(req, res);
-	console.log('UserID: ', req.params.uid);
-	const { uid } = req.params;
-	console.log('uid:', uid);
-		user.load(req, res, uid);
-		console.log('userLOADEDBACKEND: ', req.user);
-  res.end("Displaying information for uid " + req.params.uid);
-};
-
-
 	app.get('/meds', (req, res) => {
 		meds.list(req, res)
 		.then(response => res.send(response));
 	});
-	app.get('/users/:uid', test);
+	app.get('/users/:uid', (req, res) => {
+		console.log('UserID', req.params.uid);
+		user.load(req, res, req.params.uid)
+		.then(response => res.send(response));	
+		console.log('userLoadedFromBackEnd', req.user);
+	});
 //2
 	app.post('/users', (req, res) => {
 		// console.log('request to the server: ', req.body);

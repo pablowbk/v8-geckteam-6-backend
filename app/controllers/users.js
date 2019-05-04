@@ -33,8 +33,9 @@ export const load = (req, res, next) =>
 						if (!user) {
 							throw new APIError('User does not exist', 404);
 						}
-      req.user = user;
-      console.log('user lodaded: ', user);		
+      req.user.name = user;
+      res.send(user);		
+      console.log('user loaded: ', user);
 					})
 					.catch(next);
  
