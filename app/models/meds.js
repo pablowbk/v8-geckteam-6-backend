@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 
-const ObjectId = Schema.Types.ObjectId;
 
 const MedSchema = new Schema({
 	manufacturer: {
@@ -49,9 +48,8 @@ const MedSchema = new Schema({
 		required: false,
 	},
 	owner: {
-		type: ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'User',
-		required: true,
 	},
 	});
 
@@ -68,8 +66,8 @@ MedSchema.post('save', function (next) {
 
 MedSchema.statics = {
 	get(id) {
-		return this.findById(id)
-			.populate('owner')
+		return this.findOne(id)
+			.populate('user')
 			.exec();
 	},
 	list() {

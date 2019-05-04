@@ -23,8 +23,8 @@ export const login = (req, res, next) =>
 																		});
 																		const id = user.id;
 																		console.log('user id', id);
-
 																	return	res.status(201).send({ token, id });
-																	});
+																	})
+																	.catch(next);
 					})
 					.catch(next);

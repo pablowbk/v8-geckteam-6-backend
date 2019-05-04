@@ -27,14 +27,14 @@ export const list = (req, res, next) =>
     .then(users => res.send(users))
     .catch(next);
 
-export const load = (req, res, next, id) =>
-	User.get(id)
+export const load = (req, res, next) =>
+	User.get(req.params.uid)
 					.then(user => {
 						if (!user) {
 							throw new APIError('User does not exist', 404);
 						}
-						req.user = user;
-						next();
+      req.user = user;
+      console.log('user lodaded: ', user);		
 					})
 					.catch(next);
  

@@ -1,10 +1,10 @@
 import Meds from '../models/meds.js';
 
 export const addit = (req, res, next) => {
-	console.log('request :', req.body);
+	console.log('request :', req);
 	Meds.create({
 	...req.body,
-		owner: req.body._id
+	owner: req.id
 	}, (err, med) => {
 		if (err) {
 			console.log('Error creating the MED: ', err);

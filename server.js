@@ -33,10 +33,23 @@ app.use(
 	// 		.then(() => res.send(user));
 	// });
 
+const test = function (req, res, next) {
+//user exist?
+	user.exist(req, res);
+	console.log('UserID: ', req.params.uid);
+	const { uid } = req.params;
+	console.log('uid:', uid);
+		user.load(req, res, uid);
+		console.log('userLOADEDBACKEND: ', req.user);
+  res.end("Displaying information for uid " + req.params.uid);
+};
+
+
 	app.get('/meds', (req, res) => {
 		meds.list(req, res)
 		.then(response => res.send(response));
 	});
+	app.get('/users/:uid', test);
 //2
 	app.post('/users', (req, res) => {
 		// console.log('request to the server: ', req.body);
@@ -44,14 +57,15 @@ app.use(
 	});
 	app.post('/meds', (req, res) => {
 		console.log('requested input med:', req.body);
-		meds.addit(req, res)
+		meds.addit(req, res);
 	});
 	app.post('/auth', (req, res) => {
 		// console.log('Asking for the Authorization: ', req.body);
 		auth.login(req, res);
 	});
 
- app.listen(config.port, () => {
+ app.listen(config.port, (err) => {
+			if (err) throw err;
 			console.log('Server is Up&Running on port %d', config.port);
 	});
 
