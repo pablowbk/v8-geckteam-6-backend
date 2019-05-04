@@ -90,7 +90,6 @@ UserSchema.methods = {
 };
 UserSchema.statics = {
 	get(id) {
-		console.log('id: ', id);
 		const $or = [{ name: id }, { email: id }];
 		console.log('$or', $or);
 		if (Types.ObjectId.isValid(id)) {

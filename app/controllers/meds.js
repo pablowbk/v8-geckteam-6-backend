@@ -1,7 +1,6 @@
 import Meds from '../models/meds.js';
 
 export const addit = (req, res, next) => {
-	console.log('request :', req);
 	Meds.create({
 	...req.body,
 	owner: req.id

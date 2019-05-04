@@ -33,9 +33,7 @@ app.use(
 		.then(response => res.send(response));
 	});
 	app.get('/users/:uid', (req, res) => {
-		console.log('UserID', req.params.uid);
-		user.load(req, res, req.params.uid)
-		.then(response => res.send(response));	
+		user.load(req, res, req.params.uid);
 		console.log('userLoadedFromBackEnd', req.user);
 	});
 //2
@@ -44,7 +42,6 @@ app.use(
 			user.register(req, res);
 	});
 	app.post('/meds', (req, res) => {
-		console.log('requested input med:', req.body);
 		meds.addit(req, res);
 	});
 	app.post('/auth', (req, res) => {

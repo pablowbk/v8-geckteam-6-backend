@@ -3,7 +3,6 @@ import APIError from '../helpers/APIError';
 
 export const register = function (req, res, next) {
 	const { email, name, password, confirmPassword, terms } = req.body;
-	console.log('request from controller: ', req.body);
   if (!name || !email || !password || !terms) {
     return res.status(400).json('invalid data submitted');	
   }
