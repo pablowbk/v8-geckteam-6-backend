@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
+ import mongoose, { Schema, Types } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import bcrypt from 'bcrypt';
 import config from '../config';

@@ -17,6 +17,7 @@ export const register = function (req, res, next) {
 			console.log('Error creating an User: ', err);
 			res.status(400).send(err);
 		} else {
+			console.log('User Submitted');
 			return res.status(201).send(user);
 		}
 	});
